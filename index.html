@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/styles.css">
+    <title>BASH</title>
+    <link rel="shortcut icon" href="./sources/Icon.png" type="image/x-icon">
+</head>
+<body>
+    <div class="cli-container">
+        <div class="cli-input">
+            <input type="text" id="commandInput" placeholder="" onkeypress="terminal.handleKeyPress(event)">
+        </div>
+        <div class="cli-prompt-line" id="cli-prompt-line"></div>
+        <div class="cli-body" id="cli-body">
+            <!-- Aquí se mostrará la salida de la "línea de comandos" -->
+        </div>
+        <script src="./js/main.js"></script>
+    </div>
+</body>
+</html>
