@@ -21,9 +21,6 @@ body {
     overflow-y: auto;
     padding: 10px;
     background-color: #000;
-}
-
-.cli-body div {
     white-space: pre-line;
 }
 
@@ -33,6 +30,7 @@ body {
     left: 0;
     width: 100%;
     display: flex;
+    flex-direction: row;
     align-items: center;
 }
 
@@ -43,5 +41,76 @@ body {
     background-color: #000;
     color: #fff;
     outline: none;
+    font-family: 'Courier New', monospace;
 }
 
+.cli-prompt-line {
+    padding-right: 10px;
+    color: #fff; /* Color de la línea de comandos */
+}
+
+:root {
+    --cli-background-color: #000; /* Color de fondo predeterminado */
+    --cli-text-color: #fff; /* Color de texto predeterminado */
+}
+
+.cli-container {
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--cli-background-color);
+    color: var(--cli-text-color);
+    padding: 10px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.cli-input input {
+    flex: 1;
+    padding: 5px;
+    border: none;
+    background-color: var(--cli-background-color);
+    color: var(--cli-text-color);
+    outline: none;
+    font-family: 'Courier New', monospace;
+}
+
+.cli-body {
+    height: calc(100% - 30px);
+    overflow-y: auto;
+    padding: 10px;
+    background-color: var(--cli-background-color);
+    white-space: pre-line;
+}
+
+:root {
+    --cli-background-color: #000; /* Color de fondo predeterminado */
+    --cli-text-color: #fff; /* Color de texto predeterminado */
+}
+
+.cli-container {
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--cli-background-color);
+    color: var(--cli-text-color);
+    padding: 10px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.cli-input input {
+    flex: 1;
+    padding: 5px;
+    border: none;
+    background-color: var(--cli-background-color);
+    color: var(--cli-text-color);
+    outline: none;
+    font-family: 'Courier New', monospace;
+}
+
+.cli-body {
+    height: calc(100% - 30px);
+    overflow-y: auto;
+    padding: 10px;
+    background-color: var(--cli-background-color);
+    white-space: pre-line;
+}

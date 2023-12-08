@@ -7,6 +7,11 @@ class Terminal {
         this.nanoContent = "";
         this.adminMode = false;
         this.commandHistory = [];
+        this.availableCommands = [
+            "clear", "mkdir", "ls", "rmdir", "cd", "rename", "note", "nano", "cat", "rm",
+            "history", "clearhistory", "pwd", "sudo", "exit", "whoami", "echo", "date",
+            "ifconfig", "help", "ping", "background-colour",
+        ];
     }
 
     updatePrompt() {
@@ -14,8 +19,7 @@ class Terminal {
         const currentTime = currentDate.toLocaleTimeString();
 
         const promptLine = document.getElementById("cli-prompt-line");
-        promptLine.innerHTML = `<span>${currentTime}</span> <span>${this.currentPath}</span> >`;
-
+        promptLine.innerHTML = `<span>${currentTime}</span> <span>${this.currentPath}</span> >`     ;
     }
 
     handleKeyPress(event) {
@@ -119,27 +123,14 @@ class Terminal {
                 this.ping(commandParts[1], cliBody);
                 break;
             case "help":
-                cliBody.innerHTML += `<div>Comandos disponibles:</div>`;
-                cliBody.innerHTML += `<div>clear - Limpiar la pantalla</div>`;
-                cliBody.innerHTML += `<div>mkdir [nombre] - Crear una carpeta</div>`;
-                cliBody.innerHTML += `<div>ls - Listar el contenido del directorio</div>`;
-                cliBody.innerHTML += `<div>rmdir [nombre] - Borrar una carpeta</div>`;
-                cliBody.innerHTML += `<div>cd [nombre] - Cambiar de directorio</div>`;
-                cliBody.innerHTML += `<div>rename [antiguo] [nuevo] - Renombrar carpeta</div>`;
-                cliBody.innerHTML += `<div>note [nombre.txt] - Crear un archivo de texto</div>`;
-                cliBody.innerHTML += `<div>nano [nombre.txt] - Editar un archivo de texto</div>`;
-                cliBody.innerHTML += `<div>cat [nombre.txt] - Mostrar el contenido de un archivo</div>`;
-                cliBody.innerHTML += `<div>rm [nombre] - Borrar carpeta o archivo</div>`;
-                cliBody.innerHTML += `<div>history - Mostrar historial de comandos</div>`;
-                cliBody.innerHTML += `<div>clearhistory - Borrar historial de comandos</div>`;
-                cliBody.innerHTML += `<div>pwd - Mostrar directorio actual</div>`;
-                cliBody.innerHTML += `<div>sudo su - Entrar en modo administrador</div>`;
-                cliBody.innerHTML += `<div>exit - Salir del modo nano o administrador</div>`;
-                cliBody.innerHTML += `<div>whoami - Mostrar el nombre de usuario actual</div>`;
-                cliBody.innerHTML += `<div>echo [mensaje] - Mostrar un mensaje en la pantalla</div>`;
-                cliBody.innerHTML += `<div>date - Mostrar la fecha y hora actual</div>`;
-                cliBody.innerHTML += `<div>ifconfig - Mostrar la ip publica</div>`;
+                this.showHelp(cliBody);
                 break;
+            case "colour":
+                this.changeTextColor(commandParts[1], cliBody);
+                break;
+            case "background-colour":
+                this.changebackgroundcolour(commandParts[1], cliBody);
+                break;                
             default:
                 cliBody.innerHTML += `<div>Comando no reconocido: ${command}</div>`;
                 break;
@@ -179,19 +170,30 @@ class Terminal {
         }
     }
 
-    cd(folderName, cliBody) {
-        if (!folderName) {
-            cliBody.innerHTML += `<div>Error: Se requiere un nombre de carpeta para cd.</div>`;
+    cd(targetPath, cliBody) {
+        if (!targetPath) {
+            cliBody.innerHTML += `<div>Error: Se requiere una ruta para cd.</div>`;
+            return;
+        }
+    
+        let newPath;
+    
+        // Manejar rutas absolutas
+        if (targetPath.startsWith("/")) {
+            newPath = targetPath;
         } else {
-            const newPath = `${this.currentPath}/${folderName}`;
-            if (this.folders.some(folder => folder.startsWith(newPath))) {
-                this.currentPath = newPath;
-                this.folders = this.folders.filter(folder => folder.startsWith(this.currentPath));
-            } else {
-                cliBody.innerHTML += `<div>Error: La carpeta "${folderName}" no existe.</div>`;
-            }
+            // Manejar rutas relativas
+            newPath = `${this.currentPath}/${targetPath}`;
+        }
+    
+        // Verificar si la carpeta existe
+        if (this.folders.some(folder => folder === newPath)) {
+            this.currentPath = newPath;
+        } else {
+            cliBody.innerHTML += `<div>Error: La carpeta "${targetPath}" no existe.</div>`;
         }
     }
+    
 
     rename(currentName, newName, cliBody) {
         cliBody.innerHTML += `<div>&gt; rename ${currentName} ${newName}</div>`;
@@ -353,6 +355,36 @@ class Terminal {
             .catch(() => {
                 cliBody.innerHTML += `<div>Error al hacer ping a ${host}</div>`;
             });
+    }
+
+    showHelp(cliBody) {
+        cliBody.innerHTML += "<div>Comandos disponibles:</div>";
+        for (const command of this.availableCommands) {
+            cliBody.innerHTML += `<div>${command}</div>`;
+        }
+    }
+
+    changeTextColor(textColor, cliBody) {
+        if (!textColor) {
+            cliBody.innerHTML += `<div>Error: Se requiere un color para cambiar el color del texto.</div>`;
+            return;
+        }
+    
+        const container = document.querySelector(".cli-container");
+        container.style.color = textColor;
+    
+        cliBody.innerHTML += `<div>Color del texto cambiado a ${textColor}.</div>`;
+    }
+    
+    
+    changebackgroundcolour(color, cliBody) {
+        if (color) {
+            document.documentElement.style.setProperty('--cli-background-color', color);
+            this.updatePrompt();
+            cliBody.innerHTML += `<div>Color cambiado a ${color}.</div>`;
+        } else {
+            cliBody.innerHTML += `<div>Error: Especifica un color válido (por ejemplo, "color #ff0000").</div>`;
+        }
     }
     
     initialize() {

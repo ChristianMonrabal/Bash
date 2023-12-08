@@ -9,12 +9,12 @@
 </head>
 <body>
     <div class="cli-container">
-        <div class="cli-input">
-            <input type="text" id="commandInput" placeholder="" onkeypress="terminal.handleKeyPress(event)">
-        </div>
-        <div class="cli-prompt-line" id="cli-prompt-line"></div>
         <div class="cli-body" id="cli-body">
             <!-- Aquí se mostrará la salida de la "línea de comandos" -->
+        </div>
+        <div class="cli-input">
+            <div class="cli-prompt-line" id="cli-prompt-line"></div>
+            <input type="text" id="commandInput" placeholder="" onkeypress="terminal.handleKeyPress(event)">
         </div>
         <script src="./js/main.js"></script>
     </div>
